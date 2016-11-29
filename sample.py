@@ -45,7 +45,8 @@ class Query(gp.ObjectType):
     books = gp.List(Novel)
 
     def resolve_book(self, args, context, info):
-        return data[1]
+        return context['novel'] 
+        # return data[1]
 
     def resolve_books(self, args, context, info):
         return [data[x] for x in data]
@@ -83,9 +84,10 @@ mu = '''mutation addnewbook {
 
 if __name__ == '__main__':
     #test_query()
-    result = schema.execute(query)
-    addresult = schema.execute(mu)
+    result = schema.execute(query, context_value={'novel': Novel(id=4, name='comic', author="any", publish_year = 1900)})
+    #addresult = schema.execute(mu)
+    print(result.errors)
     print(result.data['book'])
-    print(result.data['books'])
-    print(addresult.data['add']['newbook'])
+    #print(result.data['books'])
+    #print(addresult.data['add']['newbook'])
     # app.run(debug=True)
